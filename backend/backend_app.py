@@ -35,6 +35,5 @@ def delete(post_id):
     Route for deleting a blog post by its post ID.
     """
     storage.delete_blog(post_id)
-    posts = storage.list_blogs()
-    return jsonify(posts)
+    return jsonify({"message": f"Post with id {post_id} has been deleted successfully."}), 200
 
