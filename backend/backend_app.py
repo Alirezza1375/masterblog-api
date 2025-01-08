@@ -9,8 +9,31 @@ storage = StorageJson()
 
 @app.route('/api/posts', methods=['GET'])
 def get_posts():
+    """
+    Fetch and return blog posts, sorted by query parameters.
+    """
+    permissible_arguments = ['sort', 'direction']
+    sort_permissible_values = ['title', 'content', 'id']
+    direction_permissible_values = ['asc', 'desc']
+    arguments = request.args
+    for argument, value in arguments.items():
+        if argument not in permissible_arguments:
+            return jsonify({'error': f'Unexpected key: {argument}'}), 400
+        elif argument == 'sort' and value not in sort_permissible_values:
+            return jsonify({'error': f'Invalid sort value: {value}. '
+                                     f'Expected values: {sort_permissible_values}'}), 400
+        elif argument == 'direction' and value not in direction_permissible_values:
+            return jsonify(
+                {'error': f'Invalid direction value: {value}. '
+                          f'Expected values: {direction_permissible_values}'}), 400
+    sort_value = request.args.get('sort', 'id')
+    direction_value = request.args.get('direction', 'desc')
+    reverse_freq = {'desc': False, 'asc': True}
     posts = storage.list_blogs()
-    return jsonify(posts)
+
+    sorted_posts = sorted(posts, key=lambda post: post.get(sort_value, ''),
+                          reverse=reverse_freq[direction_value])
+    return jsonify(sorted_posts), 200
 
 
 @app.route('/api/posts', methods=['POST'])
