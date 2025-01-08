@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from backend.storage.storage_json import StorageJson
 from flask_swagger_ui import get_swaggerui_blueprint
+from marshmallow import ValidationError
 
 app = Flask(__name__)
 CORS(app)  # This will enable CORS for all routes
