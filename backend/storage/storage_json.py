@@ -1,6 +1,6 @@
 import json
 import os
-from datetime import datetime, date
+from datetime import datetime
 from backend.storage.istorage import IStorage
 
 
@@ -103,6 +103,6 @@ class StorageJson(IStorage):
         except Exception as e:
             print(f"Error writing to file: {e}")
 
-    def get_formatted_data(self, data):
+    def get_formatted_date(self, date):
         """Format the date as dd.mm.yyyy for display purposes."""
-        return date.strftime('%d.%m.%Y')
+        return date.strftime('%d.%m.%y')
